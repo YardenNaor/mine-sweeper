@@ -225,10 +225,10 @@ function gameOver() {
 // ● Sunglasses – WIN 😎
 // ● Clicking the smiley should reset the game
 
-function cellMarked(elCell) {
-console.log('hi hi')
-//    elCell.addEventListener('contextmenu', (event) => {
-//         gBoard[i][j].isMarked = !gBoard[i][j].isMarked
-//         elCell.innerHTML = FLAG
-//     })
+function cellMarked(elCell, i, j) {
+
+   elCell.addEventListener('contextmenu', (event) => {
+        gBoard[i][j].isMarked = !gBoard[i][j].isMarked
+        elCell.innerHTML = FLAG
+    })
 }
