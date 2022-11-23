@@ -3,37 +3,6 @@
 
 
 
-function createMat(ROWS, COLS) {
-    const mat = []
-    for (var i = 0; i < ROWS; i++) {
-        const row = []
-        for (var j = 0; j < COLS; j++) {
-            row.push('')
-        }
-        mat.push(row)
-    }
-    return mat
-}
-
-
-
-function renderBoard(board) {
-    var strHTML = ''
-    for (var i = 0; i < board.length; i++) {
-        strHTML += '<tr>'
-        for (var j = 0; j < board[0].length; j++) {
-            const cell = board[i][j]
-            strHTML += `<td data-i="${i}" data-j="${j}" onclick="onCellClicked(this, ${i}, ${j})" class="${className} ">${cell}</td>`
-        }
-        strHTML += '</tr>'
-
-    }
-    const elBoard = document.querySelector('tbody.board')
-    elBoard.innerHTML = strHTML
-
-
-}
-
 function renderCell(location, value) {
     const cellSelector = '.' + getClassName(location) // cell-i-j
     const elCell = document.querySelector(cellSelector)
