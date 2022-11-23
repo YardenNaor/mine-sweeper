@@ -2,6 +2,10 @@ body{
     text-align: center;
 }
 
+.time{
+    height: 50px;
+}
+
 .life{
     font-size: xx-large;
 }
@@ -9,6 +13,9 @@ body{
 .smily{
 font-size: xx-large;
 text-align: center;
+display:block ;
+margin: auto ;
+margin-bottom: 20px;
 }
 
 .board{

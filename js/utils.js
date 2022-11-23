@@ -3,18 +3,18 @@
 
 
 
-function renderCell(location, value) {
-    const cellSelector = '.' + getClassName(location) // cell-i-j
-    const elCell = document.querySelector(cellSelector)
-    elCell.innerHTML = value
+// function renderCell(location, value) {
+//     const cellSelector = '.' + getClassName(location) // cell-i-j
+//     const elCell = document.querySelector(cellSelector)
+//     elCell.innerHTML = value
 
-}
+// }
 
 
-function getClassName(location) {
-    const cellClass = 'cell-' + location.i + '-' + location.j
-    return cellClass
-}
+// function getClassName(location) {
+//     const cellClass = 'cell-' + location.i + '-' + location.j
+//     return cellClass
+// }
 
 
 

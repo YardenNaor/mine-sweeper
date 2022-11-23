@@ -11,15 +11,21 @@
 
 <body onload="onGameInit()">
     <div class="life"></div>
-    <button class="smily" onclick="onGameInit()">🙈</button>
+    <h2 class="time">0:000</h2>
+
+    <div><button onclick="createDifficultyLevel(1)">Easy</button>
+        <button onclick="createDifficultyLevel(2)">Medium</button>
+        <button onclick="createDifficultyLevel(3)">Hard</button>
+    </div>
+    <button class="smily" onclick="onGameInit()">🐵</button>
     <div class="board-container">
         <table class="board">
-            <tbody>
+            <tbody oncontextmenu="return false">
 
-            </tbody >
+            </tbody>
         </table>
     </div>
-<footer> Yarden Naor</footer>
+    <footer> Yarden Naor</footer>
     <script src="js/utils.js"></script>
     <script src="js/game.js"></script>
 
