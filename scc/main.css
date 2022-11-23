@@ -1,6 +1,21 @@
+body{
+    text-align: center;
+}
+
+.life{
+    font-size: xx-large;
+}
+
+.smily{
+font-size: xx-large;
+text-align: center;
+}
+
+.board{
+margin: auto;
 
 
-
+}
 
 td {
 background-color: gray;
@@ -12,3 +27,6 @@ text-align: center;
 cursor: grab;
 }
 
+footer {
+    margin: 30px
+}
