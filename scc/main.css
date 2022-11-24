@@ -8,6 +8,11 @@ body {
   
 }
 
+h1{
+color: black;
+font-family:cursive;
+
+}
 .time {
     height: 25px;
     background-color: rgba(240, 248, 255, 0.534);
@@ -94,5 +99,11 @@ td {
 
 footer {
     margin: 200px;
+    font-size: 50px;
+}
+
+.hints{
+    cursor: grab;
+    margin-top: 20px;
     font-size: 50px;
 }

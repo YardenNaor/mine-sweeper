@@ -10,6 +10,7 @@
 </head>
 
 <body onload="onGameInit()">
+    <h1>MINE SWEEPER</h1>
     <div class="life"></div>
     <h2 class="time">00:00</h2>
 
@@ -17,7 +18,7 @@
         <button onclick="createDifficultyLevel(2)">Medium</button>
         <button onclick="createDifficultyLevel(3)">Hard</button>
     </div>
-    <div class="flags-count"> hh</div>
+    <div class="flags-count"></div>
     <button class="smily" onclick="onGameInit()"></button>
     <div class="board-container">
         <table class="board">
@@ -26,6 +27,7 @@
             </tbody>
         </table>
     </div>
+    <div class="hints"></div>
     <footer> Yarden Naor</footer>
     <script src="js/utils.js"></script>
     <script src="js/game.js"></script>

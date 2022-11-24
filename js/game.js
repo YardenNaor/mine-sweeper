@@ -4,6 +4,8 @@
 
 const MINE = '💣'
 const FLAG = '🏴‍☠️'
+const HINT = '☀️'
+const TAKEN_HINT = '🌞'
 
 
 var gBoard
@@ -35,7 +37,7 @@ function onGameInit() {
     if (gIntervalId) clearInterval(gIntervalId)
     gIntervalId = null
     gGame.markedCount = 0
-    gGame.livesCount = 3
+    gGame.livesCount = 2
     gGame.shownCount = 0
     gShownMines = 0
     gGame.steps = []
@@ -51,6 +53,7 @@ function onGameInit() {
     renderBoard(gBoard)
     renderSmily('normal')
     renderFlagsCount()
+    renderHints(3)
 }
 
 function createDifficultyLevel(level) {
@@ -58,16 +61,17 @@ function createDifficultyLevel(level) {
         case 1:
             gLevel.SIZE = 4
             gLevel.MINES = 2
+            gGame.livesCount = 2
             break;
         case 2:
             gLevel.SIZE = 8
             gLevel.MINES = 14
-
+            gGame.livesCount = 3
             break;
         case 3:
             gLevel.SIZE = 12
             gLevel.MINES = 32
-
+            gGame.livesCount = 3
     }
     // console.log('g:', gBoard)
     clearInterval(gIntervalId)
@@ -113,12 +117,6 @@ function renderBoard(board) {
         for (var j = 0; j < board[0].length; j++) {
             const cell = board[i][j]
             var img = ''
-            // if (cell.isShown) {
-            //     if (cell.isMine) img = MINE
-            //     else if (cell.minesAroundCount) img = cell.minesAroundCount
-            // } else {
-            //     if (cell.isMarked) img = FLAG
-            // }
             strHTML += `<td class="cell-${i}-${j}" onclick="onCellClicked(this,${i}, ${j})" oncontextmenu= "cellMarked(this,${i},${j})">${img}</td>`
         }
         strHTML += '</tr>'
@@ -147,6 +145,18 @@ function renderFlagsCount() {
     const elCount = document.querySelector('.flags-count')
     elCount.innerText = `🏴‍☠️  ${gGame.flagsCount}`
 }
+
+function renderHints(hintsCount) {
+    const elhints = document.querySelector('.hints')
+    var strHTML = ''
+    for (var i = 0; i < hintsCount; i++) {
+        strHTML += `<span onclick="takeHint(this,gBoard)">${HINT}</span>`
+    }
+    console.log('html:', strHTML)
+    elhints.innerHTML = strHTML
+}
+
+
 
 function onCellClicked(elCell, i, j) {
 
@@ -271,12 +281,12 @@ function cellMarked(elCell, i, j) {
         if (!gGame.flagsCount) return
         gGame.flagsCount--
         gGame.markedCount++
-        gBoard[i][j].isMarked=true
+        gBoard[i][j].isMarked = true
     } else {
         if (gGame.flagsCount === gLevel.MINES) return
         gGame.flagsCount++
         gGame.markedCount--
-        gBoard[i][j].isMarked=false
+        gBoard[i][j].isMarked = false
     }
 
     console.log('marked:', gGame.markedCount)
@@ -316,4 +326,39 @@ function expandShown(board, clickedCellI, clickedCellJ) {
 // neighbors are revealed for a second, and the clicked hint
 // disappears.
 
-// function makeHints()
+function takeHint(elhint, board) {
+    elhint.innerText = TAKEN_HINT
+    // var strHTML = ''
+    // for (var i = 0; i < board.length; i++) {
+    //     strHTML += '<tr>'
+    //     for (var j = 0; j < board[0].length; j++) {
+    //         const cell = board[i][j]
+    //         var img = ''
+    //         strHTML += `<td class="cell-${i}-${j}" onclick="revealNegs(${i}, ${j})" oncontextmenu= "cellMarked(this,${i},${j})">${img}</td>`
+    //     }
+    //     strHTML += '</tr>'
+    // }
+    // const elBoard = document.querySelector('tbody')
+    // elBoard.innerHTML = strHTML
+
+}
+
+
+// function revealNegs(cellI, cellJ) {
+//     if (!gBoard[cellI][cellJ].isShown) return
+//     for (var i = cellI - 1; i <= cellI + 1; i++) {
+//         if (i < 0 || i >= gBoard.length) continue
+
+//         for (var j = cellJ - 1; j <= cellJ + 1; j++) {
+//             if (i === cellI && j === cellJ) continue
+//             if (j < 0 || j >= gBoard[i].length) continue
+//             const cell = gBoard[i][j]
+//             const elCell = document.querySelector(`.cell-${i}-${j}`)
+//             if (cell.isMine) elCell.innerText = MINE
+
+//         }
+//     }
+//     gTimeOutId = setTimeout(renderBoard,5000)
+// }
+
+
