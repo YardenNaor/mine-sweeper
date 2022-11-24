@@ -145,8 +145,7 @@ function renderSmily(value) {
 function renderFlagsCount() {
 
     const elCount = document.querySelector('.flags-count')
-    console.log('flags:', elCount)
-    elCount.innerText = `🏴‍☠️${gGame.flagsCount}`
+    elCount.innerText = `🏴‍☠️  ${gGame.flagsCount}`
 }
 
 function onCellClicked(elCell, i, j) {
@@ -232,7 +231,6 @@ function takeLife() {
 
 function renderLife() {
     const elLife = document.querySelector('.life')
-    // console.log('div:', elLife)
     elLife.innerHTML = `You have ${gGame.livesCount} lifes`
 }
 
@@ -247,7 +245,6 @@ function lose() {
     for (var i = 0; i < gMinedCellsIdx.length; i++) {
         const cellI = gMinedCellsIdx[i].i
         const cellJ = gMinedCellsIdx[i].j
-        // if ((cellI !== clickedCellI) && (cellJ !== clickedCellJ)) {
         gBoard[cellI][cellJ].isShown = true
         const elCell = document.querySelector(`.cell-${cellI}-${cellJ}`)
         elCell.innerText = MINE
@@ -270,19 +267,22 @@ function cellMarked(elCell, i, j) {
     if (gGame.steps.length === 1) {
         if (!gIntervalId) startTimer()
     }
-    gBoard[i][j].isMarked = !gBoard[i][j].isMarked
-
-    if (gBoard[i][j].isMarked) {
-        if (gGame.flagsCount) {
-            gGame.markedCount++
-            gGame.flagsCount--
-        }
-    } else if (gGame.flagsCount <= gLevel.MINES) {
-        gGame.markedCount--
+    if (!gBoard[i][j].isMarked) {
+        if (!gGame.flagsCount) return
+        gGame.flagsCount--
+        gGame.markedCount++
+        gBoard[i][j].isMarked=true
+    } else {
+        if (gGame.flagsCount === gLevel.MINES) return
         gGame.flagsCount++
+        gGame.markedCount--
+        gBoard[i][j].isMarked=false
     }
+
+    console.log('marked:', gGame.markedCount)
     renderFlagsCount()
-    elCell.innerText = (gBoard[i][j].isMarked && gGame.flagsCount) ? FLAG : null
+    elCell.innerText = (gBoard[i][j].isMarked) ? FLAG : null
+
     checkGameOver()
 }
 
@@ -309,3 +309,11 @@ function expandShown(board, clickedCellI, clickedCellJ) {
     }
 }
 
+
+// The user has 3 hints
+// When a hint is clicked, it changes its look, example:
+// Now, when a cell (unrevealed) is clicked, the cell and its
+// neighbors are revealed for a second, and the clicked hint
+// disappears.
+
+// function makeHints()
