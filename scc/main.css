@@ -1,6 +1,6 @@
 body {
     text-align: center;
-    background-image: url(/img/hill.jpg);
+    background-image: url(../img/hill.jpg);
     background-repeat: no-repeat;
     background-size: cover;
     background-attachment: fixed;
