@@ -13,6 +13,8 @@ var gEmptyCellsIdx
 var gMinedCellsIdx
 var gShownMines
 var gIntervalId
+var gTimeOutId
+
 
 var gLevel = {
     SIZE: 4,
@@ -28,16 +30,18 @@ var gGame = {
     livesCount: 3,
     secsPassed: 0,
     steps: [],
-    firstClick: false
+    firstClick: false,
+    hintMode: false
 }
 
 
 
 function onGameInit() {
     if (gIntervalId) clearInterval(gIntervalId)
+    if (gTimeOutId) clearTimeout(gTimeOutId)
     gIntervalId = null
     gGame.markedCount = 0
-    gGame.livesCount = 2
+    gGame.livesCount = gGame.livesCount
     gGame.shownCount = 0
     gShownMines = 0
     gGame.steps = []
@@ -45,6 +49,7 @@ function onGameInit() {
     gMinedCellsIdx = []
     gGame.firstClick = false
     gGame.isOn = true
+    gGame.hintMode = false
     gGame.flagsCount = gLevel.MINES,
         gBoard = buildBoard(gLevel.SIZE, gLevel.SIZE)
     findEmptyCells(gBoard)
@@ -150,7 +155,7 @@ function renderHints(hintsCount) {
     const elhints = document.querySelector('.hints')
     var strHTML = ''
     for (var i = 0; i < hintsCount; i++) {
-        strHTML += `<span onclick="takeHint(this,gBoard)">${HINT}</span>`
+        strHTML += `<span onclick="takeHint(this)">${HINT}</span>`
     }
     console.log('html:', strHTML)
     elhints.innerHTML = strHTML
@@ -159,33 +164,38 @@ function renderHints(hintsCount) {
 
 
 function onCellClicked(elCell, i, j) {
-
+    // console.log('hint:',gGame.hintMode)
     const cell = gBoard[i][j]
     if (!gGame.isOn) return
-    if (cell.isMarked) return
-    if (!cell.isShown) {
-        gGame.steps.push({ i, j })
-        cell.isShown = true
-        if (!gMinedCellsIdx.length) {
-            setMines(i, j)
-            setMinesNegsCount()
-            if (!gIntervalId) startTimer()
+    if (!gGame.hintMode) {
+        if (cell.isMarked) return
+        if (!cell.isShown) {
+            gGame.steps.push({ i, j })
+            cell.isShown = true
+            if (!gMinedCellsIdx.length) {
+                setMines(i, j)
+                setMinesNegsCount()
+                if (!gIntervalId) startTimer()
+            }
+            if (cell.isMine) {
+                gShownMines++
+                elCell.style.backgroundColor = '#d95151'
+                elCell.innerText = MINE
+                takeLife()
+            } else if (cell.minesAroundCount) {
+                gGame.shownCount++
+                elCell.innerText = cell.minesAroundCount
+                elCell.style.backgroundColor = 'white'
+            } else {
+                gGame.shownCount++
+                expandShown(gBoard, i, j)
+            }
         }
-        if (cell.isMine) {
-            gShownMines++
-            elCell.style.backgroundColor = '#d95151'
-            elCell.innerText = MINE
-            takeLife()
-        } else if (cell.minesAroundCount) {
-            gGame.shownCount++
-            elCell.innerText = cell.minesAroundCount
-            elCell.style.backgroundColor = 'white'
-        } else {
-            gGame.shownCount++
-            expandShown(gBoard, i, j)
-        }
+        checkGameOver()
+    } else {
+        if (cell.isShown) revealNegs(i, j)
     }
-    checkGameOver()
+console.log('time:',gGame.secsPassed)
 }
 
 
@@ -320,45 +330,52 @@ function expandShown(board, clickedCellI, clickedCellJ) {
 }
 
 
-// The user has 3 hints
-// When a hint is clicked, it changes its look, example:
-// Now, when a cell (unrevealed) is clicked, the cell and its
-// neighbors are revealed for a second, and the clicked hint
-// disappears.
-
-function takeHint(elhint, board) {
-    elhint.innerText = TAKEN_HINT
-    // var strHTML = ''
-    // for (var i = 0; i < board.length; i++) {
-    //     strHTML += '<tr>'
-    //     for (var j = 0; j < board[0].length; j++) {
-    //         const cell = board[i][j]
-    //         var img = ''
-    //         strHTML += `<td class="cell-${i}-${j}" onclick="revealNegs(${i}, ${j})" oncontextmenu= "cellMarked(this,${i},${j})">${img}</td>`
-    //     }
-    //     strHTML += '</tr>'
-    // }
-    // const elBoard = document.querySelector('tbody')
-    // elBoard.innerHTML = strHTML
-
+function takeHint(elHint) {
+    if (!gGame.steps.length) return
+    gGame.hintMode = true
+    elHint.innerText =TAKEN_HINT
+    elHint.onclick = function() {
+        return false;
+      }
 }
 
 
-// function revealNegs(cellI, cellJ) {
-//     if (!gBoard[cellI][cellJ].isShown) return
-//     for (var i = cellI - 1; i <= cellI + 1; i++) {
-//         if (i < 0 || i >= gBoard.length) continue
+function revealNegs(cellI, cellJ) {
+    if (gTimeOutId) clearTimeout(gTimeOutId)
+    if (!gBoard[cellI][cellJ].isShown || gBoard[cellI][cellJ].isMine) return
+    for (var i = cellI - 1; i <= cellI + 1; i++) {
+        if (i < 0 || i >= gBoard.length) continue
 
-//         for (var j = cellJ - 1; j <= cellJ + 1; j++) {
-//             if (i === cellI && j === cellJ) continue
-//             if (j < 0 || j >= gBoard[i].length) continue
-//             const cell = gBoard[i][j]
-//             const elCell = document.querySelector(`.cell-${i}-${j}`)
-//             if (cell.isMine) elCell.innerText = MINE
+        for (var j = cellJ - 1; j <= cellJ + 1; j++) {
+            if (i === cellI && j === cellJ) continue
+            if (j < 0 || j >= gBoard[i].length) continue
+            const cell = gBoard[i][j]
+            const elCell = document.querySelector(`.cell-${i}-${j}`)
+            console.log('elcell:', elCell)
+            if (cell.isMine) elCell.innerText = MINE
 
-//         }
-//     }
-//     gTimeOutId = setTimeout(renderBoard,5000)
-// }
+        }
+    }
+    gTimeOutId = setTimeout(hideNegs, 1000, cellI, cellJ)
+}
 
 
+function hideNegs(cellI, cellJ) {
+    gGame.hintMode = false
+    for (var i = cellI - 1; i <= cellI + 1; i++) {
+        if (i < 0 || i >= gBoard.length) continue
+
+        for (var j = cellJ - 1; j <= cellJ + 1; j++) {
+            if (i === cellI && j === cellJ) continue
+            if (j < 0 || j >= gBoard[i].length) continue
+            const cell = gBoard[i][j]
+            const elCell = document.querySelector(`.cell-${i}-${j}`)
+            if (cell.isMine && !cell.isShown) elCell.innerText = null
+
+        }
+    }
+
+}
+
+// Keep the best score in local storage (per level) and show it on
+// the page

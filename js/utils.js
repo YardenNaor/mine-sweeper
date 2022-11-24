@@ -3,18 +3,6 @@
 
 
 
-// function renderCell(location, value) {
-//     const cellSelector = '.' + getClassName(location) // cell-i-j
-//     const elCell = document.querySelector(cellSelector)
-//     elCell.innerHTML = value
-
-// }
-
-
-// function getClassName(location) {
-//     const cellClass = 'cell-' + location.i + '-' + location.j
-//     return cellClass
-// }
 
 
 
@@ -23,6 +11,7 @@ function startTimer() {
     const startTime = Date.now()
     gIntervalId = setInterval(() => {
         const seconds = (Date.now() - startTime) / 1000
+        gGame.secsPassed=seconds
         var elH2 = document.querySelector('.time')
         elH2.innerText = seconds.toFixed(2)
     }, 1);
