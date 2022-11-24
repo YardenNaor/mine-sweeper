@@ -20,13 +20,19 @@
 
 
 function startTimer() {
-    gStartTime = Date.now()
-    gInterval = setInterval(() => {
-        const seconds = (Date.now() - gStartTime) / 1000
+    const startTime = Date.now()
+    gIntervalId = setInterval(() => {
+        const seconds = (Date.now() - startTime) / 1000
         var elH2 = document.querySelector('.time')
-        elH2.innerText = seconds.toFixed(3)
+        elH2.innerText = seconds.toFixed(2)
     }, 1);
 }
+
+function renderTimeZero(){
+    var elH2 = document.querySelector('.time')
+    elH2.innerText = '00:00'
+}
+
 
 function getRandomInt(min, max) {
     min = Math.ceil(min);

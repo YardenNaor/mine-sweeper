@@ -1,39 +1,98 @@
-body{
+body {
     text-align: center;
+    background-image: url(/img/hill.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    /* font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; */
+  
 }
 
-.time{
-    height: 50px;
+.time {
+    height: 25px;
+    background-color: rgba(240, 248, 255, 0.534);
+    width: 300px;
+    padding: 40px;
+    padding-top: 20px;
+    margin: auto;
+    font-size: 40px;
 }
 
-.life{
+.life {
     font-size: xx-large;
 }
 
-.smily{
-font-size: xx-large;
-text-align: center;
-display:block ;
-margin: auto ;
-margin-bottom: 20px;
+.levels {
+    margin: 20px
 }
 
-.board{
-margin: auto;
+.levels button {
+    width: 200px;
+    height: 50px;
+    box-shadow: inset rgb(0 0 0 / 24%) -6px -5px 5px 0px;
+    font-size: 25px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    background-color: rgba(199, 199, 199, 0.692);
+    border: 0ch;
+}
+
+.flags-count{
+    display:inline-block;
+    background-color: rgba(240, 248, 255, 0.459);
+    font-size: 70px;
+    height: 70px;
+    max-height: 70px;
+    padding:10px;
+    margin-bottom: 20px;
+    /* margin-left: 30px; */
+}
+
+
+.smily {
+    font-size: 70px;
+    height: 100px;
+    max-height: 100px;
+    /* max-width: 100px; */
+    text-align: center;
+    /* display: block; */
+    margin: auto;
+    margin-bottom: 20px;
+    margin-left: 30px;
+    box-shadow: inset rgb(0 0 0 / 24%) -6px -5px 5px 0px;
+    background-color: rgba(199, 199, 199, 0.692);
+    border: 0;
+    /* padding: 20px; */
+}
+
+.board {
+    margin: auto;
 
 
 }
+
+/* table {
+    border: solid 15px rgb(199, 199, 199);
+    box-shadow: inset rgb(0 0 0 / 24%) -6px -5px 5px 0px;
+} */
 
 td {
-background-color: gray;
-border: solid 2px darkblue ;
-width: 100px;
-height: 100px;
-font-size: 50px;
-text-align: center;
-cursor: grab;
+    background-color: rgba(199, 199, 199, 0.747);
+    border: solid 2px black;
+    width: 50px;
+    min-width: 50px;
+    max-width: 50px;
+    height: 50px;
+    max-height: 50px;
+    min-height: 50px;
+    overflow: hidden;
+    white-space: nowrap;
+    font-size: 30px;
+    text-align: center;
+    cursor: grab;
+    box-shadow: inset rgb(0 0 0 / 24%) -6px -5px 5px 0px;
 }
 
 footer {
-    margin: 30px
+    margin: 200px;
+    font-size: 50px;
 }
