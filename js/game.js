@@ -41,7 +41,6 @@ function onGameInit() {
     if (gTimeOutId) clearTimeout(gTimeOutId)
     gIntervalId = null
     gGame.markedCount = 0
-    gGame.livesCount = gGame.livesCount
     gGame.shownCount = 0
     gShownMines = 0
     gGame.steps = []
@@ -51,7 +50,8 @@ function onGameInit() {
     gGame.isOn = true
     gGame.hintMode = false
     gGame.flagsCount = gLevel.MINES,
-        gBoard = buildBoard(gLevel.SIZE, gLevel.SIZE)
+        gGame.livesCount = (gLevel.SIZE === 4) ? 2 : 3
+    gBoard = buildBoard(gLevel.SIZE, gLevel.SIZE)
     findEmptyCells(gBoard)
     renderLife()
     renderTimeZero()
@@ -61,7 +61,7 @@ function onGameInit() {
     renderHints(3)
 }
 
-function createDifficultyLevel(level) {
+function createDifficultyLevel(level = 'Easy') {
     switch (level) {
         case 1:
             gLevel.SIZE = 4
@@ -188,6 +188,7 @@ function onCellClicked(elCell, i, j) {
                 elCell.style.backgroundColor = 'white'
             } else {
                 gGame.shownCount++
+                elCell.style.backgroundColor = 'white'
                 expandShown(gBoard, i, j)
             }
         }
@@ -195,7 +196,7 @@ function onCellClicked(elCell, i, j) {
     } else {
         if (cell.isShown) revealNegs(i, j)
     }
-console.log('time:',gGame.secsPassed)
+    // console.log('time:', gGame.secsPassed)
 }
 
 
@@ -271,6 +272,7 @@ function lose() {
         elCell.style.backgroundColor = 'gray'
         // }
     }
+    clearInterval(gIntervalId)
     renderSmily('lose')
 }
 
@@ -319,12 +321,12 @@ function expandShown(board, clickedCellI, clickedCellJ) {
                 if (!cell.isShown) gGame.shownCount++
                 cell.isShown = true
                 const elCell = document.querySelector(`.cell-${emptyCellI}-${emptyCellJ}`)
-                if (cell.minesAroundCount) elCell.innerText = cell.minesAroundCount
-
                 elCell.style.backgroundColor = 'white'
-
+                if (cell.minesAroundCount) elCell.innerText = cell.minesAroundCount
             }
-
+            //     for (var i = 0; i < gEmptyCellsIdx.length; i++) {
+            //     expandShown(gBoard,emptyCellI,emptyCellJ)
+            // }
         }
     }
 }
@@ -333,10 +335,10 @@ function expandShown(board, clickedCellI, clickedCellJ) {
 function takeHint(elHint) {
     if (!gGame.steps.length) return
     gGame.hintMode = true
-    elHint.innerText =TAKEN_HINT
-    elHint.onclick = function() {
+    elHint.innerText = TAKEN_HINT
+    elHint.onclick = function () {
         return false;
-      }
+    }
 }
 
 
